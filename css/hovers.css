@@ -1,0 +1,11 @@
+button:hover{
+  background-color: rgba(255,255,255,.2);
+  cursor: pointer;
+}
+.img-nav-cont:hover{
+  background-color: rgba(255,255,255,.1);
+  cursor: pointer;
+}
+.img-nav-cont-red:hover{
+  background-color: rgba(255,0,0,.6);
+}
