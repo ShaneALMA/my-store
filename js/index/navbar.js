@@ -4,63 +4,101 @@ import u from '../util.js'
 const bottomBar = u.getElem('.bottom-bar');
 const btnSearch = u.getElem('#btn-search');
 const btnMenu = u.getElem('#btn-menu');
-// const btnSearchIpt = u.getElem('#btn-search-ipt');
-// const iptSearch = u.getElem('#ipt-search');
 
 // consts
-const bottomBarHeight = bottomBar.offsetHeight;
-let openSearchForm = false;
-let openMoreOptions = false;
 const formSearch = u.createElem('form');
-formSearch.innerHTML = 
+const inputSearch = u.createElem('input');
+const btnInputSearch = u.createElem('button');
+formSearch.className = 'form-search';
+inputSearch.placeholder = 'Buscar';
+btnInputSearch.innerHTML = 
 `
-
+<img class="img-nav" src="img/search.svg">
 `;
+formSearch.appendChild(inputSearch);
+formSearch.appendChild(btnInputSearch);
 
+const moreOpts = u.createElem('div');
+moreOpts.className = 'more-opts';
+moreOpts.innerHTML = 
+`
+<div class="img-nav-cont">
+  <img class="img-nav" src="img/dark_light.svg">
+</div>
+`;
+// default container
+bottomBar.appendChild(formSearch);
+
+const bottomBarHeight = bottomBar.offsetHeight;
 // hidding bottom bar
 bottomBar.style.height = '0';
 
+let isOpenBottombar = false;
+let currentCont = '';
 function searchForm(){
-  if(!openSearchForm && !openMoreOptions){
-    openSearchForm = true;
+  if(!isOpenBottombar){
+    bottomBar.innerHTML = '';
+    bottomBar.appendChild(formSearch);
     showBottomBar();
+    showCloseIcon(btnSearch);
+    currentCont = 'search';
+    isOpenBottombar = true;
+  }else if(isOpenBottombar && currentCont !== 'search'){
+    bottomBar.innerHTML = '';
+    bottomBar.appendChild(formSearch);
+    showCloseIcon(btnSearch);
+    showFirstIcon(btnMenu);
+    currentCont = 'search';
+  }else if(isOpenBottombar && currentCont === 'search'){
+    closeBottomBar();
+    showFirstIcon(btnSearch);
+    isOpenBottombar = false;
   }
-  if(openSearchForm || openMoreOptions){
-    
-  }
-  btnSearch.children[0].classList.toggle('img-nav-scale');
-  btnSearch.children[1].classList.toggle('img-nav-scale');
-  btnSearch.classList.toggle('img-nav-cont-red');
-  // iptSearch.focus();
 }
 
 function moreOptions(){
-  if(!openMoreOptions && !openSearchForm){
-    openMoreOptions = true;
+  if(!isOpenBottombar){
+    bottomBar.innerHTML = '';
+    bottomBar.appendChild(moreOpts);
     showBottomBar();
+    showCloseIcon(btnMenu);
+    currentCont = 'menu';
+    isOpenBottombar = true;
+  }else if(isOpenBottombar && currentCont !== 'menu'){
+    bottomBar.innerHTML = '';
+    bottomBar.appendChild(moreOpts);
+    showCloseIcon(btnMenu);
+    showFirstIcon(btnSearch);
+    currentCont = 'menu';
+  }else if(isOpenBottombar && currentCont === 'menu'){
+    closeBottomBar();
+    showFirstIcon(btnMenu);
+    isOpenBottombar = false;
   }
-
-  btnMenu.children[0].classList.toggle('img-nav-scale');
-  btnMenu.children[1].classList.toggle('img-nav-scale');
-  btnMenu.classList.toggle('img-nav-cont-red');
 }
 
+function showFirstIcon(btn){
+  btn.children[0].classList.remove('img-nav-scale');
+  btn.children[1].classList.add('img-nav-scale');
+  btn.classList.remove('img-nav-cont-red');
+}
+function showCloseIcon(btn){
+  btn.children[0].classList.add('img-nav-scale');
+  btn.children[1].classList.remove('img-nav-scale');
+  btn.classList.add('img-nav-cont-red');
+}
 function showBottomBar(){
-  
-  if(bottomBar.offsetHeight === 0){
-    bottomBar.style.height = bottomBarHeight + 'px';
-  }else{
-    bottomBar.style.height = '0';
-    // setTimeout(() => {
-    //   iptSearch.blur();
-    // }, 0);
-  }
+  bottomBar.style.height = bottomBarHeight + 'px';
 }
 
-// btnSearchIpt.addEventListener('click', e => {
-//   e.preventDefault();
-//   console.log('submiting...');
-// });
+function closeBottomBar(){
+  bottomBar.style.height = '0';
+}
+
+btnInputSearch.addEventListener('click', e => {
+  e.preventDefault();
+  console.log('submiting...');
+});
 
 btnSearch.addEventListener('click', searchForm);
 btnMenu.addEventListener('click', moreOptions);

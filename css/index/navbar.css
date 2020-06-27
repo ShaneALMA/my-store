@@ -8,6 +8,7 @@
   justify-content: space-between;
 }
 .brand{
+  font-size: 25px;
   font-weight: 300;
   padding: 5px;
 }
